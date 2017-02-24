@@ -49,16 +49,23 @@
     </ul>
     <script>
         var menu = document.getElementById('menu');
+        var declare = document.getElementById('declare');
         function contextMenu() {
             var ev = ev || event;
             ev.preventDefault();
+            if(ev.stopPropagation){
+                ev.stopPropagation();
+            }else{
+                ev.cancelBubble = true;
+            }
             menu.style.cssText = 'display:block; top:' +  ev.clientY + 'px; left:' + ev.clientX +'px;';
         }
+
         function disappear() {
             menu.style.display = 'none';
         }
 
-        document.addEventListener('contextmenu',contextMenu);
+        declare.addEventListener('contextmenu',contextMenu);
         document.addEventListener('click',disappear);
 
         function popup(ev) {
