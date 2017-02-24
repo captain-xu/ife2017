@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            display: none;
+        }
+        label{
+            display: inline-block;
+            line-height: 15px;
+            height: 15px;
+        }
+        /*背景图方式*/
+        #bg input[type="radio"]+label{
+            background: url("image/sprite.jpg") no-repeat 20px -30px;
+            width: 35px;
+        }
+        #bg input[type="radio"]:checked+label{
+            background: url("image/sprite.jpg") no-repeat 20px -45px;
+            width: 35px;
+        }
+        #bg input[type="checkbox"]+label{
+            background: url("image/sprite.jpg") no-repeat 40px 0px;
+            width: 55px;
+        }
+        #bg input[type="checkbox"]:checked+label{
+            background: url("image/sprite.jpg") no-repeat 40px -15px;
+        }
+        /*伪元素方式*/
+        #pseudo input[type="checkbox"] + label::after {
+            content: '\a0'; /* non-break space */
+            display: inline-block;
+            text-align: center;
+            width: 15px;
+            height: 15px;
+            line-height: 15px;
+            margin-left: 5px;
+            -webkit-border-radius:2px;
+            -moz-border-radius:2px;
+            border-radius: 2px;
+            border: 1px solid #cccccc;
+        }
+        #pseudo input[type="checkbox"]:checked + label::after{
+            border: 1px solid #cc3219;
+            color: #cc3219;
+            content: '\2713';
+        }
+        #pseudo input[type="radio"] + label::after{
+            content: "\a0";
+            display: inline-block;
+            width: 15px;
+            line-height: 17px;
+            height: 15px;
+            margin-left: 4px;
+            -webkit-border-radius:8px;
+            -moz-border-radius:8px;
+            border-radius:8px;
+            border: 1px solid #cccccc;
+            text-align: center;
+            vertical-align: middle;
+        }
+        #pseudo input[type="radio"]:checked + label::after{
+            border: 1px solid #cc3219;
+            color: #cc3219;
+            content: "\2022";
+        }
+    </style>
+</head>
+<body>
+<form id="bg" action="">
+    <input type="radio" id="bg_male" name="sex"><label for="bg_male">男</label>
+    <input type="radio" id="bg_female" name="sex"><label for="bg_female">女</label><br><br>
+    <input type="checkbox" id="bg_sport"><label for="bg_sport">运动</label>
+    <input type="checkbox" id="bg_music"><label for="bg_music">音乐</label>
+</form>
+<br><br>
+<form id="pseudo" action="">
+    <input type="radio" id="male" name="sex"><label for="male">男</label>
+    <input type="radio" id="female" name="sex"><label for="female">女</label><br><br>
+    <input type="checkbox" id="sport"><label for="sport">运动</label>
+    <input type="checkbox" id="music"><label for="music">音乐</label>
+</form>
+
+</body>
+</html>
