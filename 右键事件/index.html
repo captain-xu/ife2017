@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #declare{
+            background: #f0f1f5;
+            border: 1px solid #cccccc;
+            height: 80px;
+            line-height: 80px;
+            font-size: 32px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            text-indent: 4em;
+            color: #818181;
+        }
+        #menu{
+            list-style: none;
+            width: 200px;
+            border: 1px solid #cccccc;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            display: none;
+        }
+        #menu li{
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            height: 40px;
+            line-height: 40px;
+            background: #fbfbfb;
+            text-indent: 2em;
+        }
+        #menu li:first-child{
+            border-bottom: 1px solid #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="declare">
+        right click to see the menu!
+    </div>
+    <ul id="menu">
+        <li>Menu Item 1</li>
+        <li>Menu Item 1</li>
+    </ul>
+    <script>
+        var menu = document.getElementById('menu');
+        function contextMenu() {
+            var ev = ev || event;
+            ev.preventDefault();
+            menu.style.cssText = 'display:block; top:' +  ev.clientY + 'px; left:' + ev.clientX +'px;';
+        }
+        function disappear() {
+            menu.style.display = 'none';
+        }
+//        document.oncontextmenu = contextMenu;
+        document.addEventListener('contextmenu',contextMenu);
+        document.addEventListener('click',disappear);
+    </script>
+</body>
+</html>
