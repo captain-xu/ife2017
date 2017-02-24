@@ -71,6 +71,12 @@
         function popup(ev) {
             var items = menu.getElementsByTagName('li');
             for(let i = 0, len = items.length; i<len; i++){
+                items[i].onmouseover =  function () {
+                    this.style.background = '#ccc';
+                }
+                items[i].onmouseout = function () {
+                    this.style.background = '#fbfbfb';
+                }
                 items[i].onclick = function (ev) {
                     var ev = ev || event;
                     if(ev.stopPropagation){
