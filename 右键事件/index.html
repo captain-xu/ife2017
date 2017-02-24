@@ -53,11 +53,6 @@
         function contextMenu() {
             var ev = ev || event;
             ev.preventDefault();
-            if(ev.stopPropagation){
-                ev.stopPropagation();
-            }else{
-                ev.cancelBubble = true;
-            }
             menu.style.cssText = 'display:block; top:' +  ev.clientY + 'px; left:' + ev.clientX +'px;';
         }
 
