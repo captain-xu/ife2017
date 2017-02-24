@@ -57,9 +57,25 @@
         function disappear() {
             menu.style.display = 'none';
         }
-//        document.oncontextmenu = contextMenu;
+
         document.addEventListener('contextmenu',contextMenu);
         document.addEventListener('click',disappear);
+
+        function popup(ev) {
+            var items = menu.getElementsByTagName('li');
+            for(let i = 0, len = items.length; i<len; i++){
+                items[i].onclick = function (ev) {
+                    var ev = ev || event;
+                    if(ev.stopPropagation){
+                        ev.stopPropagation();
+                    }else{
+                        ev.cancelBubble = true;
+                    }
+                    alert(this.innerHTML);
+                }
+            }
+        }
+        popup();
     </script>
 </body>
 </html>
