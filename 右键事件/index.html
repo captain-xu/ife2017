@@ -68,10 +68,10 @@
             for(let i = 0, len = items.length; i<len; i++){
                 items[i].onmouseover =  function () {
                     this.style.background = '#ccc';
-                }
+                };
                 items[i].onmouseout = function () {
                     this.style.background = '#fbfbfb';
-                }
+                };
                 items[i].onclick = function (ev) {
                     var ev = ev || event;
                     if(ev.stopPropagation){
@@ -79,7 +79,9 @@
                     }else{
                         ev.cancelBubble = true;
                     }
+                    disappear();
                     alert(this.innerHTML);
+
                 }
             }
         }
