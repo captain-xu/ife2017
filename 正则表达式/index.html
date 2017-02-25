@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #telephoneNum{
+            width: 300px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        input[type="button"]{
+            width: 80px;
+            height: 30px;
+            border: none;
+        }
+        p:nth-child(2n){
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="telephoneNum" value="请输入数字,点击按钮判断是否是手机号码">
+<input type="button" id="telephone" value="判断">
+<p>foo foo bar</p><p></p>
+<p>foo bar foo</p><p></p>
+<p>foo  barbar bar</p><p></p>
+<input type="button" value="判断单词">
+<script>
+    var teleNum = document.getElementById('telephoneNum'),
+            btnNum = document.getElementById('telephone'),
+            btnStr = document.getElementsByTagName('input')[2],
+            string = document.getElementsByTagName('p'),
+            re = {
+                num:/^1[3-5|7-8]\d{9}$/,
+                str:/\b([a-zA-Z]+)\s\1/g
+            };
+    teleNum.onfocus = function () {
+        this.value = '';
+    };
+    btnNum.onclick = function () {
+        var str = teleNum.value;
+        re.num.test(str)? alert('是电话号码'):alert('不是电话号码');
+    };
+    btnStr.onclick = function () {
+        for(var i=0; i<3; i++){
+            var str = string[i*2].innerHTML;
+            string[i*2+1].innerHTML = re.str.test(str);
+        }
+    }
+</script>
+</body>
+</html>
