@@ -33,7 +33,7 @@
             string = document.getElementsByTagName('p'),
             re = {
                 num:/^1[3-5|7-8]\d{9}$/,
-                str:/\b([a-zA-Z]+)\s\1/g
+                str:/\b([a-zA-Z]+)\s\1\b/g
             };
     teleNum.onfocus = function () {
         this.value = '';
