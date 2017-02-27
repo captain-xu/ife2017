@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #box{
+            position: relative;
+            width: 300px;
+            height: 200px;
+            font-size: 40px;
+
+        }
+        img{
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+        }
+        #box:hover img{
+            -webkit-filter: blur(10px);
+            -ms-filter: blur(10px);
+            filter: blur(10px);
+            opacity: 0.8;
+        }
+        #tb{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            margin: auto;
+            border-top: 1px solid #cc150c;
+            border-bottom: 1px solid #cc150c;
+            height: 80px;
+            opacity: 0;
+            max-width: 241px;
+        }
+        #box:hover #tb{
+            opacity: 1;
+            -webkit-animation:textwidth 0.5s linear;
+            -o-animation:textwidth 0.5s linear;
+            animation:textwidth 0.5s linear;
+        }
+        #lr {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            margin: auto;
+            border-left: 1px solid #cc150c;
+            border-right: 1px solid #cc150c;
+            height: 80px;
+            opacity: 0;
+            width: 240px;
+        }
+        #box:hover #lr{
+            opacity: 1;
+            -webkit-animation: textheight 0.5s linear;
+            -o-animation: textheight 0.5s linear;
+            animation: textheight 0.5s linear;
+        }
+        #box:hover p{
+            opacity: 1;
+        }
+        p{
+            position: absolute;
+            width: 200px;
+            height: 40px;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            background-image: linear-gradient(90deg , #1ecc0a , #cc150c 25%, #1ecc0a 50%,#cc150c 75%,#1ecc0a);
+            background-size: 200% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            -webkit-animation:myfirst 1s infinite linear;
+            -o-animation:myfirst 1s infinite linear;
+            animation:myfirst 1s infinite linear;
+            opacity: 0;
+        }
+        @keyframes myfirst {
+            from{
+                background-position: 0 0 ;
+            }
+            to{
+                background-position: -100% 0 ;
+            }
+        }
+        @keyframes textwidth{
+            from{
+                width: 0;
+            }
+            to{
+                width: 240px;
+            }
+        }
+        @keyframes textheight{
+            from{
+                height: 0;
+            }
+            to{
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <img src="http://img.zcool.cn/community/0317d2658b2931aa801219c77e5bed1.jpg@250w_188h_1c_1e_2o_100sh.jpg" alt="zhanku">
+    <div id="tb"></div>
+    <div id="lr"></div>
+    <p>这里是文字</p>
+</div>
+</body>
+</html>
