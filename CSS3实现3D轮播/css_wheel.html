@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #container{
+            perspective: 800px;
+            margin-left: 400px;
+        }
+        #imgBox{
+            transform-style: preserve-3d;
+            position: relative;
+            transition: 1s;
+            width: 800px;
+        }
+        img{
+            position: absolute;
+            display: block;
+            width: 200px;
+            left: 300px;
+        }
+        img:nth-child(1){
+            transform: rotateY(90deg) translateZ(200px);
+        }
+        img:nth-child(2){
+            transform: rotateY(180deg) translateZ(200px);
+        }
+        img:nth-child(3){
+            transform: rotateY(270deg) translateZ(200px);
+        }img:nth-child(4){
+             transform: rotateY(360deg) translateZ(200px);
+         }
+
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="imgBox">
+        <img src="img/1.png" alt="">
+        <img src="img/2.png" alt="">
+        <img src="img/3.png" alt="">
+        <img src="img/4.png" alt="">
+        <!--<img src="img/5.png" alt="">-->
+        <!--<img src="img/6.png" alt="">-->
+        <!--<img src="img/7.png" alt="">-->
+        <!--<img src="img/8.png" alt="">-->
+        <!--<img src="img/9.png" alt="">-->
+    </div>
+</div>
+<script>
+    var deg = 0;
+    document.onclick = function () {
+        var imgBox = document.getElementById('imgBox');
+        deg += 90;
+        imgBox.style.transform = 'rotateY(' + deg + 'deg)';
+    }
+</script>
+</body>
+</html>
