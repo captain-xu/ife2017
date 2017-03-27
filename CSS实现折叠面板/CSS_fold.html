@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            display: none;      /*隐藏单选框*/
+        }
+        label{
+            display: block;
+            min-height: 40px;
+            width: 620px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            background: #ebebeb;
+            cursor: pointer;
+            margin: 5px 0;
+            text-indent: 1em;
+        }
+        label.two{
+            display: none;      /*兄弟节点先隐藏起来*/
+        }
+        input:checked + label{
+            display: none;      /*点击之后隐藏自己*/
+        }
+        input:checked + label + input + label{
+            display: block;     /*点击之后自己的兄弟节点出现*/
+        }
+        input:checked + label + input + label:after{
+            content: "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.";
+            font-size: 14px;
+            display: block;
+            width: 600px;
+            padding: 10px;
+            border-top: 1px solid #cccccc;
+            background: #ffffff;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="box1">
+    <input type="radio" id="item1_copy" name="fold" value="">
+    <label for="item1_copy">Collapsible Group Item #1</label>
+
+    <input type="radio" id="item1" name="fold" value="">
+    <label class="two" for="item1">Collapsible Group Item #1</label>
+
+</div>
+<div id="box2">
+    <input type="radio" id="item2_copy" name="fold" value="">
+    <label for="item2_copy">Collapsible Group Item #2</label>
+
+    <input type="radio" id="item2" name="fold" value="">
+    <label class="two" for="item2">Collapsible Group Item #2</label>
+
+</div>
+<div id="box3">
+    <input type="radio" id="item3_copy" name="fold" value="">
+    <label for="item3_copy">Collapsible Group Item #3</label>
+
+    <input type="radio" id="item3" name="fold" value="">
+    <label class="two" for="item3">Collapsible Group Item #3</label>
+
+</div>
+</body>
+</html>
