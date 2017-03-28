@@ -4,57 +4,117 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        #container{
-            perspective: 800px;
-            margin-left: 400px;
+        #root{
+            perspective: 1000px;
+            border: 1px solid red;
+            overflow: hidden;
+            margin: 0 auto;
         }
-        #imgBox{
-            transform-style: preserve-3d;
+        #box{
+            height: 400px;
             position: relative;
-            transition: 1s;
-            width: 800px;
+            transform-style: preserve-3d;
         }
         img{
-            position: absolute;
             display: block;
+            position: absolute;
             width: 200px;
-            left: 300px;
+            height: 200px;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
         }
         img:nth-child(1){
-            transform: rotateY(90deg) translateZ(200px);
+            transform: rotateY(0deg) translateZ(400px);
         }
         img:nth-child(2){
-            transform: rotateY(180deg) translateZ(200px);
+            transform: rotateY(40deg) translateZ(400px);
         }
         img:nth-child(3){
-            transform: rotateY(270deg) translateZ(200px);
-        }img:nth-child(4){
-             transform: rotateY(360deg) translateZ(200px);
-         }
-
+            transform: rotateY(80deg) translateZ(400px);
+        }
+        img:nth-child(4){
+            transform: rotateY(120deg) translateZ(400px);
+        }
+        img:nth-child(5){
+            transform: rotateY(160deg) translateZ(400px);
+        }
+        img:nth-child(6){
+            transform: rotateY(200deg) translateZ(400px);
+        }
+        img:nth-child(7){
+            transform: rotateY(240deg) translateZ(400px);
+        }
+        img:nth-child(8){
+            transform: rotateY(280deg) translateZ(400px);
+        }
+        img:nth-child(9){
+            transform: rotateY(320deg) translateZ(400px);
+        }
     </style>
 </head>
 <body>
-<div id="container">
-    <div id="imgBox">
+
+<div id="root">
+    <div id="box">
         <img src="img/1.png" alt="">
         <img src="img/2.png" alt="">
         <img src="img/3.png" alt="">
         <img src="img/4.png" alt="">
-        <!--<img src="img/5.png" alt="">-->
-        <!--<img src="img/6.png" alt="">-->
-        <!--<img src="img/7.png" alt="">-->
-        <!--<img src="img/8.png" alt="">-->
-        <!--<img src="img/9.png" alt="">-->
+        <img src="img/5.png" alt="">
+        <img src="img/6.png" alt="">
+        <img src="img/7.png" alt="">
+        <img src="img/8.png" alt="">
+        <img src="img/9.png" alt="">
     </div>
 </div>
+
+
 <script>
+    (function() {
+        var lastTime = 0;
+        var vendors = ['webkit', 'moz'];
+        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+            window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] ||    // Webkit中此取消方法的名字变了
+                    window[vendors[x] + 'CancelRequestAnimationFrame'];
+        }
+
+        if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+                var id = window.setTimeout(function() {
+                    callback(currTime + timeToCall);    //这里的参数是为了模拟requestAnimationFrame的回调函数所接受到的参数。
+                }, timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+        }
+        if (!window.cancelAnimationFrame) {
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
+    }());
+
     var deg = 0;
+    var box = document.getElementById('box');
+
+    (function step() {
+        deg += 1;
+        box.style.transform = 'rotateY(' + deg + 'deg)';
+        requestAnimationFrame(step);
+    })();
+
+
     document.onclick = function () {
-        var imgBox = document.getElementById('imgBox');
-        deg += 90;
-        imgBox.style.transform = 'rotateY(' + deg + 'deg)';
-    }
+//        cancelAnimationFrame(id);
+    };
+
+
 </script>
 </body>
 </html>
