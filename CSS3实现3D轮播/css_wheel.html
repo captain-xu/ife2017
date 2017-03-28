@@ -115,6 +115,7 @@
 
     var deg = 0;
     var box = document.getElementById('box');
+
     function step() {
         if(deg%40){
             requestAnimationFrame(step);
@@ -130,6 +131,7 @@
 //        flag = !flag;
 //        requestAnimationFrame(step);
 //    };
+
     requestAnimationFrame(step);
 
     document.onclick = function () {
