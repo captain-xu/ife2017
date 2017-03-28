@@ -25,6 +25,7 @@
             top: 0;
             bottom: 0;
             margin: auto;
+            cursor: pointer;
         }
         img:nth-child(1){
             transform: rotateY(0deg) translateZ(400px);
@@ -53,6 +54,18 @@
         img:nth-child(9){
             transform: rotateY(320deg) translateZ(400px);
         }
+        p{
+            width: 800px;
+            line-height: 40px;
+            margin: 20px auto;
+            text-align: center;
+            font-size: 16px;
+            background: #94d1ff;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(57,104,180,0.3);
+            color: #3968b3;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+        }
     </style>
 </head>
 <body>
@@ -70,7 +83,7 @@
         <img src="img/9.png" alt="">
     </div>
 </div>
-
+<p>鼠标点击切换,在页面中随处点击一下便可切换</p>
 
 <script>
     (function() {
@@ -102,17 +115,26 @@
 
     var deg = 0;
     var box = document.getElementById('box');
-
-    (function step() {
+    function step() {
+        if(deg%40){
+            requestAnimationFrame(step);
+        }
         deg += 1;
         box.style.transform = 'rotateY(' + deg + 'deg)';
-        requestAnimationFrame(step);
-    })();
+    }
 
+//    box.onmouseover = function () {
+//        flag = !flag;
+//    };
+//    box.onmouseout = function () {
+//        flag = !flag;
+//        requestAnimationFrame(step);
+//    };
+    requestAnimationFrame(step);
 
     document.onclick = function () {
-//        cancelAnimationFrame(id);
-    };
+        requestAnimationFrame(step);
+    }
 
 
 </script>
