@@ -5,41 +5,49 @@
     <title>Title</title>
 </head>
 <body>
+<div id="test"></div>
 <script>
 function Observer(data) {
     this.data = data;
     this.walk(data);
 }
-Observer.prototype.walk =function (obj) {
+Observer.prototype.walk = function (obj) {
     var val;
     for(var key in obj){
+        //判断是否对象本身的属性,剔除从原型继承来的属性
         if(obj.hasOwnProperty(key)){
             val = obj[key];
-            if( typeof val === "object"){
+            //如果还没有遍历到最底层，继续new Observer
+            if( typeof val === 'object'){
                 new Observer(val);
             }
             this.convert(key,val);
         }
     }
 };
-
-Observer.prototype.convert = function (key,val) {
+Observer.prototype.convert =function (key,val) {
     Object.defineProperty(this.data,key,{
-        configurable: true,
         enumerable: true,
+        configurable: true,
         get: function () {
-            console.log("访问了" + key);
+            console.log("你访问了" + key);
             return val;
         },
         set: function (newVal) {
-            if (newVal === val) return;
+            if(newVal === val){
+                return;
+            }
+            if(typeof newVal === 'object'){
+                new Observer(newVal);       //如果新设置的值还是对象,则再次new Observer
+            }
             val = newVal;
-            console.log("设置了" + key + "新值为" + newVal)
+
+            console.log("你设置了" + key + ";新的值是" + newVal)
         }
     })
 };
 
-var app1 = new Observer({
+var app2 = new Observer({
     a: 1,
     b: 2,
     c: {
@@ -47,10 +55,82 @@ var app1 = new Observer({
         e: 4
     }
 });
-var app2 = new Observer({
+let app1 = new Observer({
     name: 'youngwind',
     age: 25
 });
+
+
+var Event = (function(){
+    var list = {},
+            listen,
+            trigger,
+            remove;
+    listen = function(key,fn){ //监听事件函数
+        if(!list[key]){
+            list[key] = []; //如果事件列表中还没有key值命名空间，创建
+        }
+        list[key].push(fn); //将回调函数推入对象的“键”对应的“值”回调数组
+    };
+
+//    list = {
+//        "某公众号" : function fn(data){
+//            console.log(data + '的推送消息：xxxxxx......');
+//        }
+//    }
+
+//    ---------------------------------------------------------------
+
+    trigger = function(){ //触发事件函数
+        console.log(arguments);     //["某公众号", "2016.11.26"],类数组
+
+        var key = Array.prototype.shift.call(arguments); //第一个参数指定“键”
+
+        console.log(arguments);     //["2016.11.26"]
+
+        msg = list[key];        //fn
+        if(!msg || msg.length === 0){
+            return false; //如果回调数组不存在或为空则返回false
+        }
+        for(var i = 0; i < msg.length; i++){
+
+            console.log(this);      //event
+
+            msg[i].apply(this, arguments); //循环回调数组执行回调函数
+        }
+        console.log(msg[0]);
+
+    };
+    remove = function(key, fn){ //移除事件函数
+        var msg = list[key];
+
+        console.log(msg);
+
+        if(!msg){
+            return false; //事件不存在直接返回false
+        }
+        if(!fn){
+            delete list[key]; //如果没有后续参数，则删除整个回调数组
+        }else{
+            for(var i = 0; i < msg.length; i++){
+                if(fn === msg[i]){
+                    msg.splice(i, 1); //删除特定回调数组中的回调函数
+                }
+            }
+        }
+    };
+    return {
+        listen: listen,
+        trigger: trigger,
+        remove: remove
+    }
+})();
+var fn = function(data){
+    console.log(data + '的推送消息：xxxxxx......');
+};
+Event.listen('某公众号', fn);
+Event.trigger('某公众号', '2016.11.26');
+Event.remove('某公众号', fn);
 </script>
 </body>
 </html>
