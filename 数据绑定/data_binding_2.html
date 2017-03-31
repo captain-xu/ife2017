@@ -39,11 +39,10 @@
                     return;
                 }
                 val = newVal;
+                self.$emit(key);
+                console.log("你设置了" + key + ", 新的值为" + newVal)
                 if(typeof newVal === "object"){
                     new Observer(newVal);
-                }else{
-                    self.$emit(key);
-                    console.log("你设置了" + key + ", 新的值为" + newVal)
                 }
             }
         })
