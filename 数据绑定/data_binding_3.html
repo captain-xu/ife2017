@@ -5,67 +5,89 @@
     <title>Title</title>
 </head>
 <body>
-
-
+<div id="test"></div>
 <script>
-    function Observer(data) {
+    function Observer (data) {
+        this._list = {};
         this.data = data;
         this.walk(data);
     }
-    
+
     Observer.prototype.walk = function (obj) {
         var val;
         for(var key in obj){
             if(obj.hasOwnProperty(key)){
                 val = obj[key];
-                if(typeof val === "object"){
+                if(val === "object"){
                     new Observer(val);
                 }
                 this.convert(key,val);
             }
         }
     };
-
     Observer.prototype.convert = function (key,val) {
+        var self = this;
         Object.defineProperty(this.data,key,{
-            enumerable: true,
             configurable: true,
+            enumerable: true,
             get: function () {
-                console.log('你访问了' + key);
+                console.log("你访问了" + key);
                 return val;
             },
             set: function (newVal) {
-                if (newVal === val) return;
+                if(newVal === val){
+                    return;
+                }
                 val = newVal;
+                self.$emit(key);
+                console.log("你设置了" + key + ", 新的值为" + newVal)
                 if(typeof newVal === "object"){
                     new Observer(newVal);
-                }else{
-//                    self.$emit(key);
-                    console.log("你设置了" + key + ", 新的值为" + newVal)
                 }
             }
         })
+    };
+    Observer.prototype.$watch = function (key,fn) {
+        if(key in this.data){
+            if(!this._list[key]){
+                this._list[key] = [];
+            }
+            this._list[key].push(fn);
+        }else{
+            alert("现在还不支持你要监听的属性")
+        }
+    };
 
+    Observer.prototype.$emit = function (key) {
+        if(key in this._list){
+            var val = this.data[key];
+            this._list[key][0](val);
+        }
     };
 
 
-
-    var app2 = new Observer({
-        name: {
-            firstName: 'shaofeng',
-            lastName: 'liang'
-        },
+    var app1 = new Observer({
+        name: 'youngwind',
         age: 25
     });
 
-//    app2.$watch('name', function (newName) {
-//        console.log('我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。')
-//    });
+    app1.data.name = {
+        lastName: 'liang',
+        firstName: 'shaofeng'
+    };
 
-//    app2.data.name.firstName = 'hahaha';
-    // 输出：我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。
-//    app2.data.name.lastName = 'blablabla';
-    // 输出：我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。
+
+    //    app1.data.name.lastName;
+    //    // 这里还需要输出 '你访问了 lastName '
+    //    app1.data.name.firstName = 'lalala';
+    //    // 这里还需要输出 '你设置了firstName, 新的值为 lalala'
+
+    // 你需要实现 $watch 这个 API
+    //    app1.$watch('age', function(age) {
+    //        console.log(`我的年纪变了，现在已经是：${age}岁了`)
+    //    });
+    //
+    //    app1.data.age = 100; // 输出：'我的年纪变了，现在已经是100岁了'
 </script>
 </body>
 </html>
