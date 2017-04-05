@@ -172,6 +172,8 @@ function progressControl() {
             myPlayer.currentTime = Math.round((wid/430)*long);             //设置跳转时间,fastSeek()方法无效
             data.flag = true;        //跳转之后直接播放
             playStop();
+        }else{
+            alert("莫着急,音乐加载中");
         }
     }
 }
