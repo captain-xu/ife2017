@@ -30,8 +30,10 @@ function control() {
     btnBox.onclick = function (e) {
         var event = e || event ;
         if(event.target.id === "playStop"){
-            data.flag = !data.flag;
-            playStop();
+            myPlayer.oncanplay = function () {
+                data.flag = !data.flag;
+                playStop();
+            }
         }else if(event.target.id === "next"){
             next();
             myPlayer.oncanplay = function () {
@@ -160,13 +162,16 @@ progressControl();
 function progressControl() {
     var progressBox = document.getElementById('progressBox');
     var progressBar = document.getElementById('progressBar');
-    progressBox.onclick = function (e) {
-        var wid = e.clientX - distance(progressBar);
-        progressBar.style.width = wid + 'px';       //进度条长短
-        var long = parseInt(myPlayer.duration);     //歌曲时长
-        myPlayer.currentTime = Math.round((wid/430)*long);             //设置跳转时间,fastSeek()方法无效
-        data.flag = true;        //跳转之后直接播放
-        playStop();
+    myPlayer.oncanplay = function () {
+        progressBox.onclick = function (e) {
+            var wid = e.clientX - distance(progressBar);
+            progressBar.style.width = wid + 'px';       //进度条长短
+
+            var long = parseInt(myPlayer.duration);     //歌曲时长
+            myPlayer.currentTime = Math.round((wid/430)*long);             //设置跳转时间,fastSeek()方法无效
+            data.flag = true;        //跳转之后直接播放
+            playStop();
+        }
     }
 }
 
