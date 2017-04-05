@@ -22,7 +22,7 @@
             border-radius: 120px;
             position: absolute;
             right: 0;
-            background-image: url("image/西山居游戏音乐 - 瞿塘峡地图音乐(水域BGM).jpg");
+            /*background-image: url("image/西山居游戏音乐 - 瞿塘峡地图音乐(水域BGM).jpg");*/
             background-position: 50% 50%;
             background-size: 240PX;
         }
@@ -97,8 +97,8 @@
 </head>
 <body>
 <div id="myPlayerBox">
-    <div id="musicName">瞿塘峡地图音乐(水域BGM)</div>
-    <div id="singer">西山居游戏音乐</div>
+    <div id="musicName"></div>
+    <div id="singer"></div>
     <div id="lastTime"></div>
 
     <div id="progressBox">
@@ -115,7 +115,7 @@
     <div id="cover"></div>
 </div>
 
-<audio id="myPlayer" src="music/西山居游戏音乐 - 瞿塘峡地图音乐(水域BGM).mp3" controls = "controls" ></audio>
+<audio id="myPlayer" src="" controls = "controls" ></audio>
 </body>
 <script>
     var myPlayer = document.getElementById('myPlayer'),
@@ -141,7 +141,7 @@
 
             ],
             flag = false,
-            listIndex = 0;
+            listIndex = -1;
 
     var re = {
         singer: /\/([a-z0-9A-Z\u4e00-\u9fa5,\s]+)\s[\-]/,
@@ -152,8 +152,16 @@
     myPlayer.addEventListener("canplay", function(){
 
         var long = parseInt(myPlayer.duration);     //歌曲时长
-
-        lastTime.innerHTML = long - myPlayer.currentTime;   //剩余时间
+        var lastTimeNum = long - myPlayer.currentTime;
+        var minute = Math.floor(lastTimeNum/60);
+        if(minute<10){
+            minute = '0' + minute;
+        }
+        var second = Number(lastTimeNum%60);
+        if(second<10){
+            second = '0' + second;
+        }
+        lastTime.innerHTML = '-' + minute + ':' + second;   //剩余时间
 
         btnBox.onclick = function (e) {
             var event = e || event ;
@@ -182,7 +190,7 @@
         function timeGo() {
             var timeKey = parseInt(myPlayer.duration - myPlayer.currentTime);
             var l = myPlayer.currentTime/myPlayer.duration;
-            console.log(l);
+
             lastTime.innerHTML = timeKey;
             progressBar.style.width = (l)*435 + 'px';
             if(timeKey>0){
@@ -192,8 +200,11 @@
         setTimeout(timeGo,50)
     }
 
+
+
+    next(); //初始化
     function next() {
-        progressBar.style.width = '0';
+        progressBar.style.width = '0';      //进度条归零
         listIndex++;
         myPlayer.src = musicPath[listIndex%12];
         musicPath[listIndex%12].replace(re.musicName,function ($0,$1) {
