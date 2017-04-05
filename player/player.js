@@ -30,10 +30,8 @@ function control() {
     btnBox.onclick = function (e) {
         var event = e || event ;
         if(event.target.id === "playStop"){
-            myPlayer.oncanplay = function () {
-                data.flag = !data.flag;
-                playStop();
-            }
+            data.flag = !data.flag;
+            playStop();
         }else if(event.target.id === "next"){
             next();
             myPlayer.oncanplay = function () {
