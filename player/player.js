@@ -48,25 +48,26 @@ myPlayer.addEventListener("canplay", function(){
 //剩余时间&进度条
 function remainTime() {
     var lastTime = document.getElementById('lastTime'),
-        progressBar = document.getElementById('progressBar');
+        progressBar = document.getElementById('progressBar'),
+        lastTimeNum = parseInt(myPlayer.duration - myPlayer.currentTime),   //剩余时间
+        minute = Math.floor(lastTimeNum/60),            //分钟转换
+        second =  Math.round(lastTimeNum%60),           //秒数转换
+        l = myPlayer.currentTime/myPlayer.duration;     //进度条长度比例
+
+    if(minute<10){
+        minute = '0' + minute;
+    }
+    if(second<10){
+        second = '0' + second;
+    }
+    lastTime.innerHTML = '-' + minute + ':' + second;   //输出剩余时间
+
+    progressBar.style.width = (l)*430 + 'px';           //输出进度条长度
 
     if(myPlayer.readyState != 4){
-        lastTime.innerHTML = '加载中';
-    }else {
-       var lastTimeNum = parseInt(myPlayer.duration - myPlayer.currentTime),   //剩余时间
-            minute = Math.floor(lastTimeNum/60),            //分钟转换
-            second =  Math.round(lastTimeNum%60),           //秒数转换
-            l = myPlayer.currentTime/myPlayer.duration;     //进度条长度比例
-
-        if(minute<10){
-            minute = '0' + minute;
-        }
-        if(second<10){
-            second = '0' + second;
-        }
-        lastTime.innerHTML = '-' + minute + ':' + second;   //输出剩余时间
-        progressBar.style.width = (l)*430 + 'px';           //输出进度条长度
+        lastTime.innerHTML = '加载中';     //加载不够时
     }
+
     return lastTimeNum;     //返回剩余时间
 }
 
