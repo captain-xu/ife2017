@@ -3,105 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        body{
-            background: #fafafa;
-        }
-        #myPlayerBox{
-            width: 750px;
-            height: 240px;
-            position: relative;
-            margin: auto;
-        }
-        /*封面*/
-        #cover{
-            width: 240px;
-            height: 240px;
-            -webkit-border-radius: 120px;
-            -moz-border-radius: 120px;
-            border-radius: 120px;
-            position: absolute;
-            right: 0;
-            /*background-image: url("image/西山居游戏音乐 - 瞿塘峡地图音乐(水域BGM).jpg");*/
-            background-position: 50% 50%;
-            background-size: 240PX;
-        }
-        /*进度条*/
-        #progressBox{
-            width: 430px;
-            height: 2px;
-            background: #dadada;
-            position: absolute;
-            left: 40px;
-            top: 120px;
-            overflow: hidden;
-        }
-        #progressBar{
-            background: #1ecc0a;
-            width: 0;
-            height: 2px;
-        }
-        /*按钮相关*/
-        #btnBox{
-            position: absolute;
-            bottom: 35px;
-            left: 40px;
-            font-size: 0;
-        }
-        #btnBox input{
-            border: none;
-            width: 26px;
-            height: 26px;
-            outline: none;
-        }
-        #btnBox input:nth-child(1){
-            margin-right: 32px;
-            background: url("image/btn.jpg");
-        }
-        #btnBox input:nth-child(2){
-            margin-right: 240px;
-            background-image: url("image/btn.jpg");
-            background-position: 130px 0;
-        }
-        #btnBox input:nth-child(3){
-            margin-right: 55px;
-            background: url("image/btn.jpg");
-            background-position: 104px 0;
-        }
-        #btnBox input:nth-child(4){
-            background: url("image/btn.jpg");
-            background-position: 78px 0;
-        }
-        /*其他信息*/
-        #lastTime{
-            font-size: 12px;
-            color: #9b9b9b;
-            position: absolute;
-            top: 100px;
-            left: 40px;
-        }
-        #musicName{
-            font-size: 22px;
-            position: absolute;
-            left: 40px;
-            top: 36px;
-        }
-        #singer{
-            font-size: 14px;
-            color: #4a4a4a;
-            position: absolute;
-            left: 40px;
-            top: 65px;
-        }
-    </style>
+    <link rel="stylesheet" href="player.css">
 </head>
 <body>
 <div id="myPlayerBox">
     <div id="musicName"></div>
     <div id="singer"></div>
     <div id="lastTime"></div>
+    <div id="volumeBox">
+        <div id="volumeBar">
+            <div id="volumeColor"></div>
+        </div>
+    </div>
 
     <div id="progressBox">
+        <div id="progressGrey"></div>
         <div id="progressBar"></div>
     </div>
 
@@ -115,107 +31,7 @@
     <div id="cover"></div>
 </div>
 
-<audio id="myPlayer" src="" controls = "controls" ></audio>
+<audio id="myPlayer" src=""></audio>
 </body>
-<script>
-    var myPlayer = document.getElementById('myPlayer'),
-            btnBox = document.getElementById('btnBox'),
-            lastTime = document.getElementById('lastTime'),
-            progressBar = document.getElementById('progressBar'),
-            cover = document.getElementById('cover'),
-            musicName = document.getElementById('musicName'),
-            singer = document.getElementById('singer'),
-            musicPath = [
-                'music/西山居游戏音乐 - 瞿塘峡地图音乐(水域BGM).mp3',
-                'music/万岁爺 - 卷睫盼.mp3',
-                'music/骆集益 - 1945.mp3',
-                'music/Cara Dillon - Craigie Hill.mp3',
-                'music/张本煜 - 一方天地.mp3',
-                'music/陈鸿宇,苏紫旭,刘昊霖 - 别送我.mp3',
-                'music/王筝 - 对你说.mp3',
-                'music/米依,江河老师,江河 - 借我.mp3',
-                'music/音频怪物 - 归.mp3',
-                'music/孟大宝 - 历历万乡（Cover 陈粒）.mp3',
-                'music/燕池 - 人海 - 2015版.mp3',
-                'music/藤田恵美 - Down By the Salley Gardens.mp3'
-
-            ],
-            flag = false,
-            listIndex = -1;
-
-    var re = {
-        singer: /\/([a-z0-9A-Z\u4e00-\u9fa5,\s]+)\s[\-]/,
-        musicName: /\s[\-]\s(.+)\.mp3/,
-        img: /music\/(.+).mp3/
-    };
-
-    myPlayer.addEventListener("canplay", function(){
-
-        var long = parseInt(myPlayer.duration);     //歌曲时长
-        var lastTimeNum = long - myPlayer.currentTime;
-        var minute = Math.floor(lastTimeNum/60);
-        if(minute<10){
-            minute = '0' + minute;
-        }
-        var second = Number(lastTimeNum%60);
-        if(second<10){
-            second = '0' + second;
-        }
-        lastTime.innerHTML = '-' + minute + ':' + second;   //剩余时间
-
-        btnBox.onclick = function (e) {
-            var event = e || event ;
-            if(event.target.id === "playStop"){
-                flag = !flag;
-                playStop();
-            }else if(event.target.id === "next"){
-                next();
-                myPlayer.oncanplay = function () {
-                    playStop();
-                }
-            }
-        }
-    });
-
-    function playStop() {
-        if(flag){
-            myPlayer.play();
-            progressGo();
-        }else {
-            myPlayer.pause();
-        }
-    }
-
-    function progressGo() {
-        function timeGo() {
-            var timeKey = parseInt(myPlayer.duration - myPlayer.currentTime);
-            var l = myPlayer.currentTime/myPlayer.duration;
-
-            lastTime.innerHTML = timeKey;
-            progressBar.style.width = (l)*435 + 'px';
-            if(timeKey>0){
-                setTimeout(timeGo,100)
-            }
-        }
-        setTimeout(timeGo,50)
-    }
-
-
-
-    next(); //初始化
-    function next() {
-        progressBar.style.width = '0';      //进度条归零
-        listIndex++;
-        myPlayer.src = musicPath[listIndex%12];
-        musicPath[listIndex%12].replace(re.musicName,function ($0,$1) {
-            musicName.innerHTML = $1;
-        });
-        musicPath[listIndex%12].replace(re.singer,function ($0,$1) {
-            singer.innerHTML = $1;
-        });
-        musicPath[listIndex%12].replace(re.img,function ($0,$1) {
-            cover.style.backgroundImage = 'url("image/' + $1 + '.jpg")';
-        });
-    }
-</script>
+<script src="player.js"></script>
 </html>

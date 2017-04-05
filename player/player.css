@@ -1,0 +1,136 @@
+body{
+    background: #fafafa;
+}
+#myPlayerBox{
+    width: 750px;
+    height: 240px;
+    position: relative;
+    margin: auto;
+}
+/*封面*/
+#cover{
+    width: 240px;
+    height: 240px;
+    -webkit-border-radius: 120px;
+    -moz-border-radius: 120px;
+    border-radius: 120px;
+    position: absolute;
+    right: 0;
+    background-position: 50% 50%;
+    background-size: 240PX;
+}
+/*进度条*/
+#progressBox{
+    width: 430px;
+    height: 4px;
+    position: absolute;
+    left: 40px;
+    top: 120px;
+    overflow: hidden;
+}
+#progressBox:hover{
+    cursor: pointer;
+}
+#progressGrey{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #dadada;
+    width: 430px;
+    height: 1px;
+}
+#progressBar{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #1ecc0a;
+    width: 0;
+    height: 1px;
+}
+/*按钮相关*/
+#btnBox{
+    position: absolute;
+    bottom: 35px;
+    left: 40px;
+    font-size: 0;
+}
+#btnBox input{
+    border: none;
+    width: 26px;
+    height: 26px;
+    outline: none;
+}
+#btnBox input:nth-child(1){
+    margin-right: 32px;
+    background: url("image/btn.jpg");
+}
+#btnBox input:nth-child(2){
+    margin-right: 240px;
+    background-image: url("image/btn.jpg");
+    background-position: 130px 0;
+}
+#btnBox input:nth-child(3){
+    margin-right: 55px;
+    background: url("image/btn.jpg");
+    background-position: 104px 0;
+}
+#btnBox input:nth-child(4){
+    background: url("image/btn.jpg");
+    background-position: 78px 0;
+}
+
+/*音量控制*/
+#volumeBox{
+    height: 12px;
+    width: 78px;
+    position: absolute;
+    background-image: url("image/volumeIcon.jpg");
+    background-repeat: no-repeat ;
+    background-position: 0px 0px;
+    background-size: 12px 36px;
+    left: 90px;
+    top: 99px;
+}
+#volumeBox:hover{
+    cursor: pointer;
+}
+#volumeBar{
+    transition: width .5s;
+    overflow: hidden;
+    width: 0px;
+    height: 2px;
+    background: #cccccc;
+    margin-left: 16px;
+    margin-top: 5px;
+
+}
+#volumeColor{
+    height: 2px;
+    background: #8a8a8a;
+}
+
+/*其他信息*/
+#lastTime{
+    font-size: 12px;
+    color: #9b9b9b;
+    position: absolute;
+    top: 100px;
+    left: 40px;
+}
+#musicName{
+    font-size: 22px;
+    position: absolute;
+    left: 40px;
+    top: 36px;
+}
+#singer{
+    font-size: 14px;
+    color: #4a4a4a;
+    position: absolute;
+    left: 40px;
+    top: 65px;
+}
+
+input:hover{
+    cursor: pointer;
+}
