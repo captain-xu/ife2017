@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #annulus{
+            width: 0;
+            height: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-right: 40px solid #1ecc0a;
+            border-left: 40px solid #1ecc0a;
+            border-bottom: 40px solid #1ecc0a;
+            border-top: 40px solid #ffffff;
+            border-radius: 300px;
+            margin: auto;
+            animation: myfirst 0.7s infinite linear;
+        }
+        #circleWhite{
+            width: 0;
+            height: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: 36px solid #ffffff;
+            border-radius: 300px;
+            margin: auto;
+        }
+        #circle{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 300px;
+            margin: auto;
+            background: #e81e21;
+        }
+        #semicircle{
+            width: 0;
+            height: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-right: 24px solid #e84b46;
+            border-left: 24px solid #e84b46;
+            border-top: 24px solid #e84b46;
+            border-bottom: 24px solid rgba(0,0,0,0);
+            border-radius: 300px;
+            margin: auto;
+            animation: myfirst 0.6s infinite linear;
+        }
+        @keyframes myfirst
+        {
+            from {transform: rotate(0deg);}
+            to {transform: rotate(-360deg);}
+        }
+    </style>
+</head>
+<body>
+
+<div id="annulus"></div>
+<div id="circleWhite"></div>
+
+
+<!--<div id="circle"></div>-->
+<div id="semicircle"></div>
+
+
+</body>
+</html>
