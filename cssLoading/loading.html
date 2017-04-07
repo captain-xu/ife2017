@@ -4,66 +4,124 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        #annulus{
-            width: 0;
-            height: 0;
+        div{
             position: absolute;
             left: 0;
             right: 0;
             top: 0;
             bottom: 0;
-            border-right: 40px solid #1ecc0a;
-            border-left: 40px solid #1ecc0a;
-            border-bottom: 40px solid #1ecc0a;
-            border-top: 40px solid #ffffff;
-            border-radius: 300px;
             margin: auto;
+        }
+        #annulus{
+            width: 0;
+            height: 0;
+            border: 40px solid #1ecc0a;
+            border-top-color: transparent;
+            border-radius: 50%;
             animation: myfirst 0.7s infinite linear;
         }
         #circleWhite{
             width: 0;
             height: 0;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
             border: 36px solid #ffffff;
-            border-radius: 300px;
-            margin: auto;
+            border-radius: 50%;
         }
-        #circle{
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            border-radius: 300px;
-            margin: auto;
-            background: #e81e21;
-        }
-        #semicircle{
+
+        .bg{
+            border-radius: 50%;
             width: 0;
             height: 0;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            border-right: 24px solid #e84b46;
-            border-left: 24px solid #e84b46;
-            border-top: 24px solid #e84b46;
-            border-bottom: 24px solid rgba(0,0,0,0);
-            border-radius: 300px;
-            margin: auto;
-            animation: myfirst 0.6s infinite linear;
+        }
+        .maskRight{
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+        }
+        .maskLeft{
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+        }
+        .rotateLeft{
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+        }
+
+        #top .bg{
+            border: 26px solid #4689ff;
+        }
+        #top .maskRight{
+            border: 26px solid #45adff;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            animation: myopacityR 0.7s infinite linear;
+        }
+        #top .maskLeft{
+            border: 26px solid #4689ff;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            animation: myopacityL 0.7s infinite linear;
+        }
+        #top .rotateLeft{
+            border: 26px solid #45adff;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            animation: myfirst 0.7s infinite linear;
+        }
+
+
+        #bottom .bg{
+            border: 26px solid #45adff;
+        }
+        #bottom .maskRight{
+            border: 26px solid #4689ff;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            animation: myopacityR 0.7s infinite linear;
+        }
+        #bottom .maskLeft{
+            border: 26px solid #45adff;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            animation: myopacityL 0.7s infinite linear;
+        }
+        #bottom .rotateLeft{
+            border: 26px solid #4689ff;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            animation: myfirst 0.7s infinite linear;
+        }
+
+        #top{
+            transform: rotate(-45deg);
+            animation: myopacityR 1.4s infinite linear;
+        }
+        #bottom{
+            transform: rotate(-45deg);
+            animation: myopacityL 1.4s infinite linear;
         }
         @keyframes myfirst
         {
             from {transform: rotate(0deg);}
             to {transform: rotate(-360deg);}
+        }
+
+        @keyframes myopacityL
+        {
+            0% {opacity: 0;}
+            50% {opacity: 0;}
+            51% {opacity: 1;}
+            99% {opacity: 1;}
+            100% {opacity: 0;}
+        }
+        @keyframes myopacityR
+        {
+            0% {opacity: 1;}
+            50% {opacity: 1;}
+            51% {opacity: 0;}
+            99% {opacity: 0;}
+            100% {opacity: 1;}
         }
     </style>
 </head>
@@ -72,9 +130,19 @@
 <div id="annulus"></div>
 <div id="circleWhite"></div>
 
+<div id="top">
+    <div class="bg"></div>
+    <div class="rotateLeft"></div>
+    <div class="maskRight"></div>
+    <div class="maskLeft"></div>
+</div>
 
-<!--<div id="circle"></div>-->
-<div id="semicircle"></div>
+<div id="bottom">
+    <div class="bg"></div>
+    <div class="rotateLeft"></div>
+    <div class="maskRight"></div>
+    <div class="maskLeft"></div>
+</div>
 
 
 </body>
