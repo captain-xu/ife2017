@@ -38,12 +38,25 @@
     var geometryCube = new THREE.CubeGeometry(1, 1, 4);
     //设置圆环形状
     var geometryTorus = new THREE.TorusGeometry(0.2, 0.06, 20, 20);
+
+    //设置纹理
+    var texture1 = THREE.ImageUtils.loadTexture('img/material.jpg',  {}, function() {
+        renderer.render(scene, camera);
+    });
+    var texture2 = THREE.ImageUtils.loadTexture('img/6.png',  {}, function() {
+        renderer.render(scene, camera);
+    });
+    texture2.wrapS = texture2.wrapT = THREE.RepeatWrapping;     //指定重复方式为两个方向（wrapS和wrapT）都重复：
+    texture2.repeat.set(10, 10);          //设置两个方向上都重复8次
+
     //设置材质
     var material = new THREE.MeshPhongMaterial({
         color: 0x999999,
 //        specular: 0x000000,       //高光颜色
-        shininess: 10       //高光大小
+        shininess: 10,       //高光大小
+        map: texture1        //贴图纹理
     });
+
 
     //设置立方体
     var cube = new THREE.Mesh(geometryCube, material);
@@ -84,7 +97,11 @@
 
     //创建平面
     var plane = new THREE.Mesh(new THREE.PlaneGeometry(18,18, 16, 16),
-            new THREE.MeshLambertMaterial({color: 0x56772A}));
+            new THREE.MeshLambertMaterial({
+                color: 0x56772A,
+                map: texture2
+            })
+    );
     plane.rotation.x = -Math.PI / 2;
     plane.position.y = -0.75;
     plane.receiveShadow = true;     //开启接受阴影
@@ -107,7 +124,7 @@
 
     scene.add(light);
 
-    var AmbientLight = new THREE.AmbientLight(0x4E5E65);        //环境光
+    var AmbientLight = new THREE.AmbientLight(0xcccccc);        //环境光
     scene.add(AmbientLight);
 
 
