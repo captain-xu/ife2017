@@ -8,7 +8,7 @@
             margin-left:20px;
         }
         .node .node{
-            display:none;
+            /*display:none;*/
         }
         .node .tree{
             height:24px;
@@ -22,65 +22,62 @@
             background:url(images/cd_zd.png) left center no-repeat;
         }
     </style>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
 </head>
 
 <body>
-<div class="cd_zj_l">
-    <div class="cd_title">目录导航</div>
-    <div class="cv_fcv node">
-        <div class="tree">哲学、宗教</div>
+
+
+<div class="tree">哲学、宗教</div>
+
+<ul class="node">
+    <li>
+        <div class="tree">哲学伦理</div>
+
         <ul class="node">
             <li>
-                <div class="tree">哲学伦理</div>
-                <ul class="node">
-                    <li>
-                        <div class="tree">马克思主义哲学</div>
-                        <div class="tree">马克思主义哲学</div>
-                        <div class="tree">马克思主义哲学</div>
-                        <div class="tree">马克思主义哲学</div>
-                    </li>
-                    <div style="clear:both"></div>
-                </ul>
-            </li>
-            <div style="clear:both"></div>
-        </ul>
-        <div class="tree">哲学、宗教</div>
-        <ul class="node">
-            <li>
-                <div class="tree">哲学伦理</div>
-                <ul class="node">
-                    <li>
-                        <div class="tree">马克思主义哲学</div>
-                        <div class="tree">马克思主义哲学</div>
-                        <div class="tree">马克思主义哲学</div>
-                        <div class="tree">马克思主义哲学</div>
-                    </li>
-                </ul>
+                <div class="tree">马克思主义哲学</div>
+                <div class="tree">马克思主义哲学</div>
+                <div class="tree">马克思主义哲学</div>
+                <div class="tree">马克思主义哲学</div>
             </li>
         </ul>
-    </div>
-</div>
-<script type="text/javascript">
-    $(".tree").each(function(index, element) {
-        if($(this).next(".node").length>0){
-            $(this).addClass("ce_ceng_close");
+    </li>
+</ul>
+
+
+
+<script>
+    var nodes = [
+
+        { name: "父节点1",
+            children: [
+                { name: "子节点1" },
+                { name: "子节点2" }
+            ]
+        },
+
+        { name: "父节点2",
+            children: [
+                { name: "子节点3" },
+                { name: "子节点4",
+                    children:[ {name:"子节点5"} ]
+                }
+            ]
         }
-    });
-    $(".tree").click(function(e){
-        var ul = $(this).next(".node");
-        if(ul.css("display")=="none"){
-            ul.slideDown();
-            $(this).addClass("ce_ceng_open");
-            ul.find(".ce_ceng_close").removeClass("ce_ceng_open");
-        }else{
-            ul.slideUp();
-            $(this).removeClass("ce_ceng_open");
-            ul.find(".node").slideUp();
-            ul.find(".ce_ceng_close").removeClass("ce_ceng_open");
-        }
-    });
+    ];
+
+    console.log(nodes instanceof Array);
+    console.log(nodes.constructor === Array);
+
+    console.log(isArray(nodes));
+
+    function isArray(o) {
+        return Object.prototype.toString.call(o) === '[object Array]';
+    }
 </script>
+
+
 
 </body>
 </html>
