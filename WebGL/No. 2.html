@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="three.js"></script>
+    <style>
+        a{
+            color: rgb(78, 94, 101);
+        }
+    </style>
+</head>
+<body>
+<canvas id="mainCanvas" width="800px" height="600px"></canvas>
+<script>
+    //渲染器
+    var renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('mainCanvas'),
+        antialias: true,        //开启消除锯齿,默认false
+        precision: "highp"      //渲染精度highp/mediump/lowp
+    });
+    renderer.setClearColor(0x999999);       //设置背景颜色
+    renderer.shadowMap.enabled = true;       //渲染阴影
+    renderer.shadowMapSoft = true;         //软阴影(好像无效)
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;     //软阴影
+
+    //创建场景
+    var scene = new THREE.Scene();
+
+    //正交投影相机
+    var camera = new THREE.OrthographicCamera(-2, 2, 1.5, -1.5, 1, 10);
+    camera.position.set(-2, 1, 4);     //相机位置
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    scene.add(camera);      //相机添加到场景中
+
+    //设置透视投影照相机
+    //        var camera = new THREE.PerspectiveCamera(45, 400/300, 1, 10);
+    //        camera.position.set(0, 0, 5);
+    //        camera.lookAt(new THREE.Vector3(0, 0, 0));
+    //        scene.add(camera);
+
+    //设置立方体形状
+    var geometryCube = new THREE.CubeGeometry(1, 1, 4);
+    //设置圆环形状
+    var geometryTorus = new THREE.TorusGeometry(0.2, 0.06, 20, 20);
+    //设置材质
+    var material = new THREE.MeshPhongMaterial({
+        color: 0x999999,
+//        specular: 0x000000,       //高光颜色
+        shininess: 10       //高光大小
+    });
+
+    //设置立方体
+    var cube = new THREE.Mesh(geometryCube, material);
+    cube.castShadow = true;     //开启立方体阴影
+    cube.receiveShadow = true;     //开启接受阴影
+
+    //设置圆环
+    var torus1 = new THREE.Mesh(geometryTorus, material);
+    var torus2 = new THREE.Mesh(geometryTorus, material);
+    var torus3 = new THREE.Mesh(geometryTorus, material);
+    var torus4 = new THREE.Mesh(geometryTorus, material);
+
+    torus1.rotation.y = Math.PI/2;
+    torus1.position.set(0.5, -0.5, 1);
+    torus1.castShadow = true;     //开启圆环阴影
+    torus1.receiveShadow = true;     //开启接受阴影
+
+    torus2.rotation.y = Math.PI/2;
+    torus2.position.set(0.5, -0.5, -1);
+    torus2.castShadow = true;     //开启圆环阴影
+    torus2.receiveShadow = true;     //开启接受阴影
+
+    torus3.rotation.y = Math.PI/2;
+    torus3.position.set(-0.5, -0.5, 1);
+    torus3.castShadow = true;     //开启圆环阴影
+    torus3.receiveShadow = true;     //开启接受阴影
+
+    torus4.rotation.y = Math.PI/2;
+    torus4.position.set(-0.5, -0.5, -1);
+    torus4.castShadow = true;     //开启圆环阴影
+    torus4.receiveShadow = true;     //开启接受阴影
+
+    scene.add(cube);         //立方体添加到场景中
+    scene.add(torus1);       //圆环添加到场景中
+    scene.add(torus2);       //圆环添加到场景中
+    scene.add(torus3);       //圆环添加到场景中
+    scene.add(torus4);       //圆环添加到场景中
+
+    //创建平面
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(18,18, 16, 16),
+            new THREE.MeshLambertMaterial({color: 0x56772A}));
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.y = -0.75;
+    plane.receiveShadow = true;     //开启接受阴影
+    scene.add(plane);
+
+    var light = new THREE.SpotLight(0xffffff, 1.5, 100);      //聚光灯
+    light.position.set(-5, 3, -5);      //点光源位置
+    light.target = cube;
+    light.castShadow = true;
+
+    light.shadow.camera.near = 2;
+    light.shadow.camera.far = 10;
+    light.shadow.camera.fov = 30;   //张角
+//    light.shadowCameraVisible = true;
+
+    light.shadow.mapSize.width = 4096;      //阴影精度
+    light.shadow.mapSize.height = 4096;     //阴影精度
+//    light.shadowDarkness = 0.3;
+
+
+    scene.add(light);
+
+    var AmbientLight = new THREE.AmbientLight(0x4E5E65);        //环境光
+    scene.add(AmbientLight);
+
+
+
+    // render
+    renderer.render(scene, camera);
+
+</script>
+</body>
+</html>
