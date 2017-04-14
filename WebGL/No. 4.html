@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script src="three.js"></script>
+<script src="TrackballControls.js"></script>
+<script src="stats.min.js"></script>
+<script>
+    init();
+    function init() {
+        var renderer = new THREE.WebGLRenderer({
+            antialias: true,        //开启消除锯齿,默认false
+            precision: "highp"      //渲染精度highp/mediump/lowp
+        });
+        renderer.setClearColor(0xaaaaaa);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
+        renderer.shadowMap.enabled = true;       //渲染阴影
+//        renderer.shadowMapSoft = true;         //软阴影(好像无效)
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;     //软阴影
+
+        var scene = new THREE.Scene();
+
+        var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 1000);
+        camera.position.set(-2, 3, 5);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        scene.add(camera);
+
+        var planeGeometry = new THREE.PlaneGeometry(6, 6);
+        var cubeGeometry = new THREE.CubeGeometry(1, 1, 2);
+        var torusGeometry = new THREE.TorusGeometry(0.2, 0.06, 20, 20);
+        var material1 = new THREE.MeshPhongMaterial({
+            color: 0xefefff,
+//            wireframe: true,
+            specular: 0xffffff,
+            shininess: 10
+        });
+        var material2 = new THREE.MeshPhongMaterial({
+            color: 0xe009921,
+//            wireframe: true,
+            specular: 0xffffff,
+            shininess: 10
+        });
+
+        var cube = new THREE.Mesh(cubeGeometry, material1);
+        var plane = new THREE.Mesh(planeGeometry, material2);
+
+        var torus1 = new THREE.Mesh(torusGeometry, material1);
+        var torus2 = new THREE.Mesh(torusGeometry, material1);
+        var torus3 = new THREE.Mesh(torusGeometry, material1);
+        var torus4 = new THREE.Mesh(torusGeometry, material1);
+        torus1.rotation.y = -Math.PI/2 ;
+        torus2.rotation.y = -Math.PI/2 ;
+        torus3.rotation.y = -Math.PI/2 ;
+        torus4.rotation.y = -Math.PI/2 ;
+
+        torus1.position.set(-0.56, 0, 0.6);
+        torus2.position.set(-0.56, 0, -0.6);
+        torus3.position.set(0.56, 0, 0.6);
+        torus4.position.set(0.56, 0, -0.6);
+
+        cube.position.y = 0.5;
+
+        plane.rotation.x = -Math.PI/2 ;
+        plane.position.y = -0.26;
+
+        plane.receiveShadow = true;     //开启接受阴影
+
+        cube.castShadow = true;     //开启立方体阴影
+        cube.receiveShadow = true;     //开启接受阴影
+
+        torus1.castShadow = true;     //开启圆环阴影
+        torus1.receiveShadow = true;     //开启接受阴影
+        torus2.castShadow = true;     //开启圆环阴影
+        torus2.receiveShadow = true;     //开启接受阴影
+        torus3.castShadow = true;     //开启圆环阴影
+        torus3.receiveShadow = true;     //开启接受阴影
+        torus4.castShadow = true;     //开启圆环阴影
+        torus4.receiveShadow = true;     //开启接受阴影
+
+        scene.add(plane);
+        scene.add(cube);
+        scene.add(torus1);
+        scene.add(torus2);
+        scene.add(torus3);
+        scene.add(torus4);
+
+        var light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(-2, 2, -5);
+        light.castShadow = true;
+        light.shadow.mapSize.width = 2048;      //阴影精度
+        light.shadow.mapSize.height = 2048;     //阴影精度
+        scene.add(light);
+
+        var AmbientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(AmbientLight);
+
+        renderer.render(scene, camera);
+
+        var controls = new THREE.TrackballControls( camera);
+        animate();
+        function animate() {
+            requestAnimationFrame( animate, renderer.domElement );
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        var stats = new Stats();
+        stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild( stats.dom );
+
+        function animate1() {
+
+            stats.begin();
+
+            // monitored code goes here
+
+            stats.end();
+
+            requestAnimationFrame( animate1 );
+
+        }
+
+        requestAnimationFrame( animate1 );
+    }
+
+
+</script>
+</body>
+</html>

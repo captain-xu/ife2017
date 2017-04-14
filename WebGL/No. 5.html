@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script src="three.js"></script>
+<script src="TrackballControls.js"></script>
+<script src="stats.min.js"></script>
+<script>
+    var requestAnimationFrame = window.requestAnimationFrame
+            || window.mozRequestAnimationFrame
+            || window.webkitRequestAnimationFrame
+            || window.msRequestAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame;
+
+    var scene, camera, renderer, id, stats;
+    var cube;
+
+    function init() {
+        stats = new Stats();     //实时FPS
+        stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.right = '0px';
+        stats.domElement.style.top = '0px';
+        document.body.appendChild(stats.domElement);
+
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,        //开启消除锯齿,默认false
+            precision: "highp"      //渲染精度highp/mediump/lowp
+        });
+        renderer.setClearColor(0xaaaaaa);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
+        renderer.shadowMap.enabled = true;       //渲染阴影
+//        renderer.shadowMapSoft = true;         //软阴影(好像无效)
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;     //软阴影
+
+        scene = new THREE.Scene();
+
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 1000);
+        camera.position.set(0, 5, 5);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        scene.add(camera);
+
+        //形状
+        var planeGeometry = new THREE.PlaneGeometry(10, 10);
+        var cubeGeometry = new THREE.CubeGeometry(1, 1, 2);
+        var torusGeometry = new THREE.TorusGeometry(0.2, 0.06, 20, 20);
+        //材质
+        var material1 = new THREE.MeshPhongMaterial({
+            color: 0xefefff,
+//            wireframe: true,
+            specular: 0xffffff,
+            shininess: 10
+        });
+        var material2 = new THREE.MeshPhongMaterial({
+            color: 0xe009921,
+//            wireframe: true,
+            specular: 0xffffff,
+            shininess: 10
+        });
+        //方块，平面，四个圆环
+        cube = new THREE.Mesh(cubeGeometry, material1);
+        var plane = new THREE.Mesh(planeGeometry, material2);
+
+        var torus1 = new THREE.Mesh(torusGeometry, material1);
+        var torus2 = new THREE.Mesh(torusGeometry, material1);
+        var torus3 = new THREE.Mesh(torusGeometry, material1);
+        var torus4 = new THREE.Mesh(torusGeometry, material1);
+        //方块位置
+        cube.position.y = 0.5;
+        //平板旋转和位置
+        plane.rotation.x = -Math.PI/2 ;
+        plane.position.y = -0.26;
+        //旋转圆环
+        torus1.rotation.y = -Math.PI/2 ;
+        torus2.rotation.y = -Math.PI/2 ;
+        torus3.rotation.y = -Math.PI/2 ;
+        torus4.rotation.y = -Math.PI/2 ;
+        //圆环位置，相对于方块
+        torus1.position.set(-0.56, -0.5, 0.6);
+        torus2.position.set(-0.56, -0.5, -0.6);
+        torus3.position.set(0.56, -0.5, 0.6);
+        torus4.position.set(0.56, -0.5, -0.6);
+
+        plane.receiveShadow = true;     //开启接受阴影
+
+        cube.castShadow = true;     //开启立方体阴影
+        cube.receiveShadow = true;     //开启接受阴影
+
+        torus1.castShadow = true;     //开启圆环阴影
+        torus1.receiveShadow = true;     //开启接受阴影
+        torus2.castShadow = true;     //开启圆环阴影
+        torus2.receiveShadow = true;     //开启接受阴影
+        torus3.castShadow = true;     //开启圆环阴影
+        torus3.receiveShadow = true;     //开启接受阴影
+        torus4.castShadow = true;     //开启圆环阴影
+        torus4.receiveShadow = true;     //开启接受阴影
+
+        var pivotPoint = new THREE.Object3D();
+        pivotPoint.add(torus1);
+        pivotPoint.add(torus2);
+        pivotPoint.add(torus3);
+        pivotPoint.add(torus4);
+        cube.add(pivotPoint);
+
+        scene.add(plane);
+        scene.add(cube);
+        //平行光和环境光
+        var light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(-2, 2, -5);
+        light.castShadow = true;
+        light.shadow.mapSize.width = 2048;      //阴影精度
+        light.shadow.mapSize.height = 2048;     //阴影精度
+        scene.add(light);
+
+        var AmbientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(AmbientLight);
+
+//        controls = new THREE.TrackballControls(camera);       //轨迹球
+
+        id = requestAnimationFrame(draw);
+
+        go(cube);
+    }
+
+
+    function draw() {
+        stats.begin();
+
+//        controls.update();
+
+        renderer.render(scene, camera);
+
+        id = requestAnimationFrame(draw);
+
+        stats.end();
+    }
+
+    init();
+    draw();
+
+    function go(obj) {
+        document.addEventListener('keydown',fn);
+        function fn(e) {
+            var ev = e || event;
+            //w-87  s-83    a-65    d-68
+            switch (ev.keyCode) {
+                case 65:
+                    obj.rotation.y += Math.PI / 6;
+                    break;
+                case 87:
+                    var a = obj.rotation.y;
+                    obj.position.z -= 0.01 * Math.cos(a);
+                    obj.position.x -= 0.01 * Math.sin(a);
+                    break;
+                case 83:
+                    var a = obj.rotation.y;
+                    obj.position.z += 0.01 * Math.cos(a);
+                    obj.position.x += 0.01 * Math.sin(a);
+                    break;
+                case 68:
+                    obj.rotation.y -= Math.PI / 6;
+                    break;
+            }
+        }
+    }
+</script>
+</body>
+</html>
