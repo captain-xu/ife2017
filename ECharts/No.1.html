@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #main{
+            width: 600px;
+            height: 400px;
+        }
+    </style>
+    <script src="echarts.js"></script>
+</head>
+<body>
+<div id="main"></div>
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var option = {
+        title: {
+            text: '最近一周气温变化',
+            textStyle: {
+                color: '#222',
+                fontSize: 16
+            },
+            textAlign: 'left',
+            subtext: '2016-04-17 —— 2016-04-24',
+            subtextStyle: {
+                color: '#222'
+            }
+        },
+        legend: {
+            data: ['最高气温', '最低气温'],
+        },
+        grid: {
+            show: true
+        },
+        xAxis: {
+            data: ['2017/04/17','2017/04/18','2017/04/19','2017/04/20','2017/04/21','2017/04/22','2017/04/23'],
+            axisLabel: {
+                formatter: function (value, index) {
+                    var date = new Date(value);
+                    var texts = [(date.getMonth() + 1), date.getDate()];
+                    if(index === 0){
+                        texts.unshift(date.getFullYear());      //在第一个刻度显示完整的年份
+                    }
+                    return texts.join('-');
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} °C'
+            }
+        },
+        series: [
+            {
+                type: 'line',
+                name: '最高气温',
+                label: {
+                    normal: {
+                        show: true,
+                        offset: [0, -5]     //标签偏移
+                    }
+                },
+                data: [11, 11, 15, 13, 12, 13, 10]
+            },
+            {
+                type: 'line',
+                name: '最低气温',
+                label: {
+                    normal: {
+                        show: true,
+                        offset: [5, -5]
+                    }
+                },
+                data: [1, -2, 2, 5, 3, 2, 0]
+            },
+            {
+                type: 'bar',
+                name: '最高气温',
+                data: [11, 11, 15, 13, 12, 13, 10]
+            },
+            {
+                type: 'bar',
+                name: '最低气温',
+                data: [1, -2, 2, 5, 3, 2, 0]
+            }
+        ]
+    };
+
+
+    myChart.setOption(option);
+</script>
+</body>
+</html>
