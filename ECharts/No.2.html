@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #main{
+            width: 600px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+<div id="main"></div>
+<script src="echarts.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var option = {
+        title: {
+            text: "what's my credit score?",
+            textStyle: {
+                color: '#43494e',
+                fontSize: 24
+            },
+            textAlign: 'left',
+            subtext: 'Puerto Rico,% decrease on a year earlier',
+            subtextStyle: {
+                color: '#060609',
+                fontSize: 20
+            },
+            left: 80
+        },
+
+        legend: {
+            data: [
+                {name :'Population', icon: 'rect'},
+                {name: 'GDP', icon: 'rect'}
+            ],
+            left: 80,
+            top: 70,
+            itemWidth: 40,
+            itemHeight: 20,
+            textStyle: {
+                color: '#060609',
+                fontSize: 18
+            }
+        },
+
+        grid: {
+            show: true,
+            left: 80,
+            top: 120,
+            containLabel: true,
+            borderWidth: 0
+        },
+
+        xAxis: [
+            {
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                axisLabel: {
+                    formatter: function (value, index) {
+                        var n = index + 6;
+                        if (index === 0) {
+                            n = 2006
+                        }
+                        return n < 10 ? '0' + n : n;
+                    },
+                    textStyle: {
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    },
+//                    interval: 0     //坐标轴刻度标签的显示间隔
+                },
+                axisLine: {
+                    onZero: false,
+                    lineStyle: {
+                        width: 2
+                    }
+                },
+                axisTick: {
+                    alignWithLabel: true
+                }
+            },
+            {
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                axisLine: {
+                    onZero: false,
+                    lineStyle: {
+                        color: 'red',
+                        width: 2
+                    }
+                },
+                axisTick: {
+                    show: false     //是否显示刻度短线
+                },
+                axisLabel: {
+                    show: false     //是否显示刻度值
+                },
+                z: 10
+            }
+        ],
+
+        yAxis: [
+            {
+                inverse: true,      //反向坐标轴
+                min: 0,
+                max: 4,
+                splitLine: {
+                    show: false     //是否显示分隔线
+                },
+                axisLine: {
+                    show: false     //是否显示轴线
+                },
+                axisTick: {
+                    show: false     //是否显示刻度短线
+                },
+                axisLabel: {
+                    show: false     //是否显示刻度值
+                }
+            },
+            {
+                inverse: true,      //反向坐标轴
+                min: 0,
+                max: 4,
+                type: 'value',
+                axisTick: {
+                    show: false,     //是否显示刻度短线
+                    alignWithLabel: true     //刻度值和刻度对齐
+                },
+                splitLine: {
+                    show: true,
+                    interval: 3,
+                    lineStyle: {
+                        color: ['#ffffff'],
+                        width: 2
+                    }
+                },
+                axisLine: {
+                    show: false     //是否显示轴线
+                },
+                axisLabel: {
+                    show: true,     //是否显示刻度值
+                    textStyle: {
+                        fontSize: 18,
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        ],
+
+        series: [
+            {
+                type: 'bar',
+                name: 'Population',
+                data: [0.3, 0.6, 0.5, 0.4, 0.3, 1.1, 1.2, 1.1, 1.6, 1.7],
+                label: {
+                    emphasis: {         //高亮状态时是否在图形上显示文本标签
+                        show: true,
+                        position: 'bottom'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#00526d'
+                    }
+                },
+                barWidth: 14,    //柱条宽度
+                barGap: 0         //柱条间隔
+            },
+            {
+                type: 'bar',
+                name: 'GDP',
+                data: [0.8, 3.4, 1.8, 2.3, 2.6, 1.9, 2.7, 0.6, 0.8, 1.0],
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'bottom'
+                    }
+                },
+                itemStyle: {        //柱条的样式
+                    normal: {
+                        color: '#00a4dc'
+                    }
+                },
+                barWidth: 14        //柱条宽度
+            }
+        ],
+        backgroundColor: '#cddee7'
+    };
+
+
+    myChart.setOption(option);
+</script>
+</body>
+</html>
