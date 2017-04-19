@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #main{
+            width: 1000px;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+<div id="main"></div>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="echarts.js"></script>
+<script>
+
+    $.get('ne_110m/ne_110m_admin_0_sovereignty.json', function (worldJson) {
+        echarts.registerMap('world', worldJson);
+        var chart = echarts.init(document.getElementById('main'));
+        var option = {
+            geo: {
+                map: 'world',
+                roam: true,     //是否可以拖动缩放
+                center: [115.97, 29.71],    //中心点
+                zoom: 1.5     //默认缩放比例
+            },
+            backgroundColor: '#cddee7'
+        };
+        chart.setOption(option)
+    });
+
+
+
+    //    myChart.setOption(option);
+</script>
+</body>
+</html>
