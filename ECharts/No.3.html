@@ -12,11 +12,11 @@
 </head>
 <body>
 <div id="main"></div>
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
 <script src="echarts.js"></script>
 <script>
 
-    $.get('ne_110m/ne_110m_admin_0_sovereignty.json', function (worldJson) {
+    $.get('ne_110m/ne_110m_admin_0_countries.json', function (worldJson) {
         echarts.registerMap('world', worldJson);
         var chart = echarts.init(document.getElementById('main'));
         var option = {
