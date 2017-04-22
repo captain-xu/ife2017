@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #main{
+            width: 1000px;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+<div id="main"></div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
+<script src="echarts.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    function splitData(rawData) {
+        var Date = [];
+        var Value = [];
+        var Volume = [];
+
+        var tickerOld, tickerNew;
+
+        var data = {};
+
+        for (var i = 0; i < rawData.length; i++) {
+            if(i < rawData.length-1){
+                tickerNew = rawData[i+1][1];
+                tickerOld = rawData[i][1];
+            }
+
+            Date.push(rawData[i][0]);
+            //[开盘值, 收盘值, 最低值, 最高值]
+            var value = [];
+            value.push(rawData[i][2],rawData[i][5],rawData[i][4],rawData[i][3]);
+            Value.push(value);
+            Volume.push(rawData[i][6]);
+
+            if(i === rawData.length-1){
+                data[tickerOld] = {};
+                data[tickerOld].Date = Date;
+                data[tickerOld].Value = Value;
+                data[tickerOld].Volume = Volume;
+            }else if(tickerNew != tickerOld){
+                data[tickerOld] = {};
+                data[tickerOld].Date = Date;
+                data[tickerOld].Value = Value;
+                data[tickerOld].Volume = Volume;
+                Date = [];
+                Value = [];
+                Volume = [];
+            }
+
+        }
+        console.log(data);
+        return data;
+    }
+
+    function calculateMA(dayCount, data) {
+
+        var result = [];
+        for (var i = 0, len = data.Value.length; i < len; i++) {
+            if (i < dayCount) {
+                result.push('-');
+                continue;
+            }
+            var sum = 0;
+            for (var j = 0; j < dayCount; j++) {
+                sum += parseFloat(data.Value[i - j][1]);
+            }
+            result.push(sum / dayCount);
+        }
+        return result;
+    }
+
+    myChart.showLoading();
+    $.get('sp500.json').done(function (rawData) {
+        myChart.hideLoading();
+        var data = splitData(rawData);
+
+        var option = {
+            legend: {
+                data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
+            },
+            tooltip: {
+                trigger: 'axis',    //坐标轴触发
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        precision: 2    //小数精度
+                    }
+                },
+                backgroundColor: 'rgba(245, 245, 245, 0.8)',
+                borderWidth: 1,
+                borderColor: '#ccc',
+                padding: 10,
+                textStyle: {
+                    color: '#000'
+                },
+                extraCssText: 'width: 170px'
+            },
+            axisPointer: {
+                snap: true,
+                link: {
+                    xAxisIndex: 'all'
+                }
+            },
+            grid: [
+                {
+                    left: '10%',
+                    right: '8%',
+                    height: '50%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '63%',
+                    height: '16%'
+                }
+            ],
+            xAxis: [
+                {
+                    data: data.A.Date,
+                    boundaryGap: false,
+                    axisLine: {onZero: false},
+                    splitLine: {show: false},
+                    splitNumber: 20,
+                    axisPointer: {
+                        z: 100
+                    }
+                },
+                {
+                    gridIndex: 1,
+                    data: data.A.Date,
+                    boundaryGap: false,     //false是数据在刻度上
+                    //不显示刻度和刻度值
+                    axisTick: {show: false},
+                    axisLabel: {show: false},
+                }
+            ],
+            yAxis: [
+                {
+                    scale: true,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                {
+                    scale: true,
+                    gridIndex: 1,
+                    splitNumber: 2,
+                    axisLine: {show: false},    //不显示轴线
+                    //不显示刻度和刻度值
+                    axisLabel: {show: false},
+                    axisTick: {show: false},
+                    //不显示分割线
+                    splitLine: {show: false}
+                }
+            ],
+            series: [
+                {
+                    name: '日K',
+                    type: 'candlestick',
+                    data: data.A.Value,
+                    //去掉边框,这样brsuh区域外的k线柱子就能真的变淡了
+                    itemStyle: {
+                        normal: {
+                            borderColor: null,
+                            borderColor0: null
+                        }
+                    },
+                },
+                {
+                    name: 'MA5',
+                    type: 'line',
+                    data: calculateMA(5,data.A),
+                    smooth: true,
+                    lineStyle: {
+                        normal: {opacity: 0.5}
+                    }
+                },
+                {
+                    name: 'MA10',
+                    type: 'line',
+                    data: calculateMA(10,data.A),
+                    smooth: true,
+                    lineStyle: {
+                        normal: {opacity: 0.5}
+                    }
+                },
+                {
+                    name: 'MA20',
+                    type: 'line',
+                    data: calculateMA(20,data.A),
+                    smooth: true,
+                    lineStyle: {
+                        normal: {opacity: 0.5}
+                    }
+                },
+                {
+                    name: 'MA30',
+                    type: 'line',
+                    data: calculateMA(30,data.A),
+                    smooth: true,
+                    lineStyle: {
+                        normal: {opacity: 0.5}
+                    }
+                },
+                {
+                    name: 'Volume',
+                    type: 'bar',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    data: data.A.Volume
+
+                }
+            ],
+            dataZoom: [
+                {
+                    show: true,
+                    type: 'slider',
+                    xAxisIndex: [0,1],
+                    filterMode: 'filter',
+                    start: 70,
+                    end: 100,
+                    top: '85%'
+                },
+                {
+                    type: 'inside',
+                    xAxisIndex: [0,1]
+                }
+            ],
+            brush: {
+                toolbox: ['lineX'],
+                seriesIndex: 'all',
+                brushLink: 'all',
+                xAxisIndex: 'all',
+                outOfBrush: {
+                    colorAlpha: 0.2
+                }
+            }
+        };
+        myChart.setOption(option);
+
+        //默认触发图表行为,图表打开时的样子
+        myChart.dispatchAction({
+            type: 'brush',
+            areas: [
+                {
+                    brushType: 'lineX',
+                    coordRange: ['20100727', '20100816'],
+                    xAxisIndex: 0
+                }
+            ]
+        });
+        
+    })
+
+
+</script>
+</body>
+</html>
