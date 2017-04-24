@@ -7,46 +7,62 @@
 <body>
 <div id="test"></div>
 <script>
+    
+    var _event = new Event();
+    
     function Observer (data) {
         this._list = {};
         this.data = data;
         this.walk(data);
+        this.eventsBus = _event;
     }
+    
 
-    Observer.prototype.walk = function (obj) {
-        var val;
-        for(var key in obj){
-            if(obj.hasOwnProperty(key)){
-                val = obj[key];
-                if(val === "object"){
-                    new Observer(val);
+    Observer.prototype.walk = function(obj, path){
+            var val;
+            for(let key in obj){
+                //只对对象本身的属性进行遍历，所以需要用hasOwnProperty进行过滤
+                if(obj.hasOwnProperty(key)){
+                    val = obj[key];
+                    if(!path){
+                        path = key;
+                    }else{
+                        path = path + key;
+                    }
+                    //如果val还不是最底层，这继续遍历
+                    if(typeof val === 'object'){
+                        new Observe(val);
+                        if(path)  path = path + '.';
+                        this.walk(val, path);
+                    }
                 }
-                this.convert(key,val);
+                this.convert(obj, key, val, path);
             }
-        }
-    };
-    Observer.prototype.convert = function (key,val) {
-        var self = this;
-        Object.defineProperty(this.data,key,{
-            configurable: true,
-            enumerable: true,
-            get: function () {
-                console.log("你访问了" + key);
-                return val;
-            },
-            set: function (newVal) {
-                if(newVal === val){
-                    return;
+        };
+    
+    Observer.prototype.function(obj, key, val, path){
+            let _this = this;
+            Object.defineProperty(obj, key, { 
+                enumerable : true,
+                configurable : true,
+                get : function(){
+                    console.log('你访问了' + key);
+                    return val;
+                },
+                set : function(newVal){
+                    console.log('你设置了' + key);
+                    console.log('新的' + key + ' = ' + newVal);
+                    val = newVal;
+                    //触发$watch监听函数
+                    _this.eventsBus.emit(path || key);
+                    //如果setter的newval是对象的话
+                    if(typeof newVal === 'object'){
+                        new Observe(val);
+                    }
                 }
-                val = newVal;
-                self.$emit(key);
-                console.log("你设置了" + key + ", 新的值为" + newVal)
-                if(typeof newVal === "object"){
-                    new Observer(newVal);
-                }
-            }
-        })
-    };
+            });
+        };
+    
     Observer.prototype.$watch = function (key,fn) {
         if(key in this.data){
             if(!this._list[key]){
@@ -58,12 +74,49 @@
         }
     };
 
-    Observer.prototype.$emit = function (key) {
-        if(key in this._list){
-            var val = this.data[key];
-            this._list[key][0](val);
+    Observer.prototype.$watch = function(attr, callback){
+            this.eventsBus.on(attr, callback);
         }
-    };
+    
+    /*事件的实现*/
+        //实现一个事件,构造函数
+        function Event(){
+            this.events = {};
+        }
+    
+     //在构造函数原型上，添加监听事件
+        Event.prototype.on = function(attr, callback){
+            //一个类型事件可以添加多个
+            if(this.events[attr]){
+                this.events[attr].push(callback);
+            }else{
+                this.events[attr] = [callback];
+            }
+        };
+        //触发事件
+        Event.prototype.emit = function(path){
+            const keys = path.split('.');
+            var parent = '';
+            const depPaths = keys.map((key, index) => {
+                if(index == 0){
+                    return key;
+                }else{
+                    let str = '';
+                    while(index--){
+                        str = keys[index] + '.' + str;
+                    }
+                    return str + key;
+                }
+            });
+            depPaths.forEach((path) => {
+                const fns = this.events[path];
+                if(fns && fns.length){
+                    fns.forEach(function(item){
+                        item();
+                    });
+                }
+            });
+        };
 
 
     var app1 = new Observer({
@@ -77,17 +130,14 @@
     };
 
 
-    //    app1.data.name.lastName;
-    //    // 这里还需要输出 '你访问了 lastName '
-    //    app1.data.name.firstName = 'lalala';
-    //    // 这里还需要输出 '你设置了firstName, 新的值为 lalala'
-
-    // 你需要实现 $watch 这个 API
-    //    app1.$watch('age', function(age) {
-    //        console.log(`我的年纪变了，现在已经是：${age}岁了`)
-    //    });
-    //
-    //    app1.data.age = 100; // 输出：'我的年纪变了，现在已经是100岁了'
+    var app =new Observe(data);
+        app.$watch('name', function(){
+            console.log('我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。');
+        })
+        app.data.name.firstName = 'hahaha';
+        // 输出：我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。
+        app.data.name.lastName = 'blablabla';
+        // 输出：我的姓名发生了变化，可能是姓氏变了，也可能是名字变了。
 </script>
 </body>
 </html>
