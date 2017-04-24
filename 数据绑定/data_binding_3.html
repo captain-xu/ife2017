@@ -40,7 +40,7 @@
             }
         };
     
-    Observer.prototype.function(obj, key, val, path){
+    Observer.prototype.convert = function(obj, key, val, path){
             let _this = this;
             Object.defineProperty(obj, key, { 
                 enumerable : true,
@@ -63,16 +63,6 @@
             });
         };
     
-    Observer.prototype.$watch = function (key,fn) {
-        if(key in this.data){
-            if(!this._list[key]){
-                this._list[key] = [];
-            }
-            this._list[key].push(fn);
-        }else{
-            alert("现在还不支持你要监听的属性")
-        }
-    };
 
     Observer.prototype.$watch = function(attr, callback){
             this.eventsBus.on(attr, callback);
