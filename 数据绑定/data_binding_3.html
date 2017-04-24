@@ -57,7 +57,7 @@
                     _this.eventsBus.emit(path || key);
                     //如果setter的newval是对象的话
                     if(typeof newVal === 'object'){
-                        new Observe(val);
+                        new Observer(val);
                     }
                 }
             });
