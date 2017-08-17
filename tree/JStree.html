@@ -67,7 +67,7 @@
 					for(let j=0;j<data[i].children.length;j++){
 						if(data[i].children[j].children){
 							str+='<li>';
-							str+=arguments.callee([].concat(data[i].children[j]));
+							str+=this.render([].concat(data[i].children[j]));
 							str+='</li>';
 						}else{
 							str+="<li>"+data[i].children[j].name+"</li>";
